@@ -28,8 +28,8 @@ import {
 } from "@/components/ui/select";
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Task name must be at least 2 characters.",
+  name: z.string().min(1, {
+    message: "Task name must not be empty.",
   }),
   priority: z.union([
     z.literal("low"),
