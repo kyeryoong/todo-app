@@ -3,7 +3,7 @@ import { atom } from "jotai";
 
 export const toDoListAtom = atom<ToDoType[]>([]);
 
-export const addToDoListAtom = atom(
+export const addToDoAtom = atom(
   null,
   (
     get,

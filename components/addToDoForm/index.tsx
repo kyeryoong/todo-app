@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useSetAtom } from "jotai";
-import { addToDoListAtom } from "@/store/toDoListAtom";
+import { addToDoAtom } from "@/store/toDoListAtom";
 import { v4 as uuidv4 } from "uuid";
 import { openDialogAtom } from "@/store/openDialogAtom";
 import { PriorityType } from "@/type/toDo";
@@ -39,7 +39,7 @@ const formSchema = z.object({
 });
 
 export function AddToDoForm() {
-  const addToDo = useSetAtom(addToDoListAtom);
+  const addToDo = useSetAtom(addToDoAtom);
   const setOpenDialog = useSetAtom(openDialogAtom);
 
   const form = useForm<z.infer<typeof formSchema>>({
