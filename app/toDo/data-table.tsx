@@ -15,6 +15,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
+import { ToDoType } from "@/type/toDo";
+import { useSetAtom } from "jotai";
+import { removeTodoAtom } from "@/store/toDoListAtom";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -30,6 +35,12 @@ export function DataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const removeToDo = useSetAtom(removeTodoAtom);
+
+  const handleDeleteButtonClick = (id: string) => {
+    removeToDo(id);
+  };
 
   return (
     <div className="rounded-md border">
@@ -54,22 +65,39 @@ export function DataTable<TData, TValue>({
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            table.getRowModel().rows.map((row) => {
+              const rowData = row.original as ToDoType;
+
+              return (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+
+                  <TableCell className="w-[36px]">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDeleteButtonClick(rowData.id)}
+                    >
+                      <Trash2 />
+                    </Button>
                   </TableCell>
-                ))}
-              </TableRow>
-            ))
+                </TableRow>
+              );
+            })
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-40 text-center">
-                No results.
+                No Tasks.
               </TableCell>
             </TableRow>
           )}
