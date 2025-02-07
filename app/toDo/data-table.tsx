@@ -20,6 +20,7 @@ import { Trash2 } from "lucide-react";
 import { ToDoType } from "@/type/toDo";
 import { useSetAtom } from "jotai";
 import { removeTodoAtom } from "@/store/toDoListAtom";
+import { Badge } from "@/components/ui/badge";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -73,14 +74,24 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+                  <TableCell>{rowData.name}</TableCell>
+
+                  <TableCell>
+                    {(() => {
+                      switch (rowData.priority) {
+                        case "high":
+                          return <Badge variant="high">High</Badge>;
+                        case "medium":
+                          return <Badge variant="medium">Medium</Badge>;
+                        case "low":
+                          return <Badge variant="low">Low</Badge>;
+                      }
+                    })()}
+                  </TableCell>
+
+                  <TableCell>
+                    {rowData.completed ? "Completed" : "Not Completed"}
+                  </TableCell>
 
                   <TableCell className="w-[36px]">
                     <Button
