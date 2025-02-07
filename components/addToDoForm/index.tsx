@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DialogFooter } from "../ui/dialog";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -57,7 +58,7 @@ export function AddToDoForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
         <FormField
           control={form.control}
           name="name"
@@ -97,7 +98,9 @@ export function AddToDoForm() {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <DialogFooter>
+          <Button type="submit">Submit</Button>
+        </DialogFooter>
       </form>
     </Form>
   );
