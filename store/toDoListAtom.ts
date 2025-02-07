@@ -1,7 +1,8 @@
 import { AddToDoType, ToDoType } from "@/type/toDo";
 import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
-export const toDoListAtom = atom<ToDoType[]>([]);
+export const toDoListAtom = atomWithStorage<ToDoType[]>("toDoList", []);
 
 export const addToDoAtom = atom(
   null,
