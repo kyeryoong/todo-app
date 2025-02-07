@@ -32,6 +32,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { format } from "date-fns/format";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -98,6 +99,15 @@ export function DataTable<TData, TValue>({
                           return <Badge variant="low">Low</Badge>;
                       }
                     })()}
+                  </TableCell>
+
+                  <TableCell>
+                    {rowData.startDate && rowData.endDate
+                      ? `${format(rowData.startDate, "PP")} ~ ${format(
+                          rowData.endDate,
+                          "PP"
+                        )}`
+                      : "None"}
                   </TableCell>
 
                   <TableCell>

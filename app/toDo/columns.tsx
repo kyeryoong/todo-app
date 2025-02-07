@@ -12,6 +12,7 @@ export const columns: ColumnDef<ToDoType>[] = [
     accessorKey: "priority",
     header: "Priority",
   },
+  { accessorKey: "date", header: "Date" },
   {
     accessorKey: "completed",
     header: "Completed",

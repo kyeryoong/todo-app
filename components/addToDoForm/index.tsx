@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { date, z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +19,7 @@ import { addToDoAtom } from "@/store/toDoListAtom";
 import { v4 as uuidv4 } from "uuid";
 import { openDialogAtom } from "@/store/openDialogAtom";
 import { PriorityType } from "@/type/toDo";
+import { format } from "date-fns";
 import {
   Select,
   SelectContent,
@@ -27,6 +28,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DialogFooter } from "../ui/dialog";
+import { cn } from "@/lib/utils";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Calendar as CalendarIcon } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -37,6 +46,8 @@ const formSchema = z.object({
     z.literal("medium"),
     z.literal("high"),
   ]) as z.ZodType<PriorityType>,
+  startDate: z.date().optional(),
+  endDate: z.date().optional(),
 });
 
 export function AddToDoForm() {
@@ -51,8 +62,13 @@ export function AddToDoForm() {
     },
   });
 
-  function onSubmit({ name, priority }: z.infer<typeof formSchema>) {
-    addToDo({ id: uuidv4(), name, priority });
+  function onSubmit({
+    name,
+    priority,
+    startDate,
+    endDate,
+  }: z.infer<typeof formSchema>) {
+    addToDo({ id: uuidv4(), name, priority, startDate, endDate });
     setOpenDialog(false);
   }
 
@@ -97,6 +113,88 @@ export function AddToDoForm() {
             </FormItem>
           )}
         />
+
+        <div className={cn("w-[100%] flex gap-x-[20px]")}>
+          <FormField
+            control={form.control}
+            name="startDate"
+            render={({ field }) => (
+              <FormItem className={cn("w-[100%]")}>
+                <FormLabel>Start Date</FormLabel>
+                <br />
+                <FormControl>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-[100%] justify-start text-left font-normal",
+                          !date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon />
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="endDate"
+            render={({ field }) => (
+              <FormItem className={cn("w-[100%]")}>
+                <FormLabel>End Date</FormLabel>
+                <br />
+                <FormControl>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-[100%] justify-start text-left font-normal",
+                          !date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon />
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <DialogFooter>
           <Button type="submit">Submit</Button>

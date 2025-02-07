@@ -1,17 +1,20 @@
-import { PriorityType, ToDoType } from "@/type/toDo";
+import { AddToDoType, ToDoType } from "@/type/toDo";
 import { atom } from "jotai";
 
 export const toDoListAtom = atom<ToDoType[]>([]);
 
 export const addToDoAtom = atom(
   null,
-  (
-    get,
-    set,
-    { id, name, priority }: { id: string; name: string; priority: PriorityType }
-  ) => {
+  (get, set, { id, name, priority, startDate, endDate }: AddToDoType) => {
     const currentToDoList = get(toDoListAtom);
-    const newToDo = { id, name, priority, completed: false };
+    const newToDo = {
+      id,
+      name,
+      priority,
+      startDate,
+      endDate,
+      completed: false,
+    };
     const newToDoList = [...currentToDoList, newToDo];
     set(toDoListAtom, newToDoList);
   }
