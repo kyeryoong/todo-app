@@ -15,10 +15,16 @@ import {
 } from "@/components/ui/dialog";
 import { AddToDoForm } from "@/components/addToDoForm";
 import { openDialogAtom } from "@/store/openDialogAtom";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const toDoList = useAtomValue(toDoListAtom);
   const [openDialog, setOpenDialog] = useAtom(openDialogAtom);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [toDoList]);
 
   return (
     <main className="p-12 flex flex-col gap-6">
@@ -35,7 +41,7 @@ export default function Home() {
         </DialogContent>
       </Dialog>
 
-      <DataTable columns={columns} data={toDoList} />
+      <DataTable columns={columns} data={toDoList} isLoading={isLoading} />
     </main>
   );
 }
